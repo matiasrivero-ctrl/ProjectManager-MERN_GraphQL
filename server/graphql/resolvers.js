@@ -4,8 +4,6 @@ import { Task } from '../models/Task.js';
 
 export const resolvers = {
   Query: {
-    hello: () => 'Hello World',
-
     projects: async () => {
       const project = await Project.find();
       return project;
@@ -51,7 +49,27 @@ export const resolvers = {
             invalidArgs: _id,
           },
         });
+
+      await Task.deleteMany({ projectId: deletedProject._id });
+
       return deletedProject;
+    },
+
+    updateProject: async (_, args) => {
+      const updatedProject = await Project.findByIdAndUpdate(args._id, args, {
+        new: true,
+      });
+
+      if (!updatedProject) {
+        throw new GraphQLError('Project not found', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args._id,
+          },
+        });
+      }
+
+      return updatedProject;
     },
 
     // Tasks Mutation
@@ -87,6 +105,23 @@ export const resolvers = {
         });
       }
       return deletedTask;
+    },
+
+    updateTask: async (_, args) => {
+      const updatedTask = await Task.findByIdAndUpdate(args._id, args, {
+        new: true,
+      });
+
+      if (!updatedTask) {
+        throw new GraphQLError('Project not found', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args._id,
+          },
+        });
+      }
+
+      return updatedTask;
     },
   },
 };
