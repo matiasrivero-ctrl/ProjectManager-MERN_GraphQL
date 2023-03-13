@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { GET_PROJECTS } from "../graphql/projects";
+import { ProjectForm } from "../components/ProjectForm";
 import { ProjectList } from "../components/ProjectList";
 import { ProjectCard } from "../components/ProjectCard";
 
@@ -12,6 +13,7 @@ export function Projects() {
   return (
     <>
       <h1>Hola Mundo!</h1>
+      <ProjectForm />
       <ProjectList />
       {data.projects.map((project) => (
         <ProjectCard key={project._id} project={project} />
